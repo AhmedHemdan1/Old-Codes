@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1536886481 source:d:\programming & simulation files\avr codes\atmega16_blinking_led\fuse.c
+	<avr/io.h>
+
+1536886496 source:d:\programming & simulation files\avr codes\atmega16_blinking_led\main.c
+	<avr/io.h>
+	<avr/delay.h>
+

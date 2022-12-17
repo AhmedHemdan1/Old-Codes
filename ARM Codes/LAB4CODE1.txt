@@ -1,0 +1,51 @@
+//Interrupt means that a specific time can execute a function (TIM2_interrupt) then come back to the main function.//
+//In This Example, Interrupt (Blinking on or off a LED) occurs at the timer-overflow (based on the ARR)//
+int x=0;
+void main()
+{
+RCC_AHB1ENR|=(1<<3);          //Enable port D
+GPIOD_MODER=0x55555555;       //All Port D Pins are outputs
+GPIOD_ODR=0x0000;             //ُAll Port D Outputs are zeros
+RCC_APB1ENR|=(1<<0);          //Enable timer 2
+
+TIM2_CR1|=(1<<2);             //URS=1 (only counter overflow/underflow generates an interrupt)
+TIM2_CR1&=~((1<<6)|(1<<5)|(1<<4)); //CMS=00,DIR=0 (Edge-Aligned Mode,Up Counter)
+TIM2_CR1|=(1<<7);             //ARPE=1 (Auto Reload Preload Enable is buffered)
+
+//counter frequency=fclk/PSC=16MHz/(1+15999)/1000=1KHz
+TIM2_PSC=15999;               //The Prescaler
+TIM2_ARR=1000;                //Auto Reload Register (The Maximum Count Number)
+
+TIM2_DIER|=(1<<0);            //UIE=1 (Update Interrupt Enable)(Interrupt will work with the overflow)
+
+/*To enable position (IRQ number) 28 in the vector table which is the IRQ for TIM2
+28/32=0.875=0 (Number of Register)
+0.875*32=28   (Number of Bit)*/
+NVIC_ISER0=1<<28;
+
+/*Interrupt set enable registers
+To enable position (IRQ number) number 100
+100/32=3.125=3 (Number of Register)
+0.125*32=4   (Number of Bit)
+NVIC_ISER3=1<<4;  */
+
+TIM2_EGR|=(1<<0);              //UG=1 (Re-initialize the counter and generates an update of the registers)
+TIM2_CR1|=(1<<0);              //CEN1 (Enable the counter)
+
+while(1);                      //The Main Function
+
+}
+
+void TIM2_interrupt() iv 44    //for timer 2, 44 is the word number in decimal and divided by 4
+{
+TIM2_SR&=~(1<<0);              //UIF=0 (Update Interrupt Flag), it must be reset after interrupt occurs
+if(x==0)
+{
+GPIOD_ODR=0xFFFF;
+}
+else
+{
+GPIOD_ODR=0x0000;
+}
+x=~x;                          //Toggles LED that is in port D
+}

@@ -1,0 +1,14 @@
+clc; clear;
+Y=[0.05-0.0225i,0.025i,-0.0025i;0.025i,0.01-0.0375i,0.0125i;-0.0025i,0.0125i,0.02-0.01i];
+c1=0.4*exp(15i*pi/180);
+I=[c1;0;0];
+V=Y\I;
+v1_abs=abs(V(1));
+v1_ang=angle(V(1))*180/pi;
+v2_abs=abs(V(2));
+v2_ang=angle(V(2))*180/pi;
+v3_abs=abs(V(3));
+v3_ang=angle(V(3))*180/pi;
+fprintf('Voltage V1, magnitude : %f  &  Voltage V1, angle in degree : %f\n',v1_abs,v1_ang);
+fprintf('Voltage V2, magnitude : %f  &  Voltage V2, angle in degree : %f\n',v2_abs,v2_ang);
+fprintf('Voltage V3, magnitude : %f  &  Voltage V3, angle in degree : %f\n',v3_abs,v3_ang);

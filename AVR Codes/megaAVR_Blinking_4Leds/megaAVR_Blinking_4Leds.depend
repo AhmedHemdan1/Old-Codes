@@ -1,0 +1,4 @@
+# depslib dependency file v1.0
+1536964582 source:d:\programming & simulation files\avr codes\megaavr_blinking_4leds\fuse.c
+	<avr/io.h>
+
